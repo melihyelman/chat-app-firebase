@@ -23,7 +23,7 @@ const SideBar = () => {
                     <MenuIcon className="h-6 w-6" />
                 </button>
             </div>
-            <div className={`bg-blue-800 text-blue-100 w-64 py-6 px-2 absolute inset-y-0 left-0 transform ${!isOpen ? "-translate-x-full" : ""} transition duration-200 ease-in-out md:relative md:translate-x-0`}>
+            <div className={`bg-blue-800 text-blue-100 w-64 py-6 z-10 px-2 absolute inset-y-0 left-0 transform ${!isOpen ? "-translate-x-full" : ""} transition duration-200 ease-in-out md:relative md:translate-x-0`}>
                 <Info />
                 <div className='flex cursor-pointer py-4 pl-4 pr-2 justify-between items-center text-white transition duration-200 hover:bg-blue-700 rounded-lg' onClick={() => setIsOpenModal(true)}>
                     <span className='text-xl font-extrabold'>Add Chanel</span>

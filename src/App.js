@@ -1,11 +1,14 @@
+import { useSelector } from 'react-redux'
+import ChatArea from './Chat/ChatArea'
 import SideBar from './components/SideBar/SideBar'
 
 const App = () => {
+  const currentChannel = useSelector(state => state.channels.currentChannel);
   return (
     <div className='relative h-full min-h-screen md:flex '>
       <SideBar />
 
-      <div className='flex-1 h-full p-10'>context</div>
+      {currentChannel && <ChatArea currentChannel={currentChannel} />}
     </div>
   )
 }

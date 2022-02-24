@@ -10,9 +10,8 @@ const Info = () => {
     const signOut = () => {
         firebase.logout();
     }
-    console.log(profile)
     return (
-        <div className='flex justify-between items-center space-x-2 mb-6'>
+        <div className='flex justify-between items-center space-x-2 pb-6 mb-4 border-b border-b-gray-400'>
             <div className='flex w-full items-center space-x-2'>
                 <img src={profile?.avatar} alt='profile' className='rounded-full h-12 w-12' />
                 <div className='flex w-full  justify-between items-center '>
