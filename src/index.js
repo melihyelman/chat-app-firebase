@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from './App';
 import SignUp from "./components/auth/SignUp"
 import Login from "./components/auth/Login"
+import firebase from "./firebase";
 
 const Root = () => (
   <Routes>
