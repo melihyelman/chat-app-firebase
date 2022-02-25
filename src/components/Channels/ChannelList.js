@@ -14,7 +14,8 @@ const ChannelList = () => {
 
     useEffect(() => {
         if (!firstMount && !isEmpty(channels)) {
-            dispatch(setCurrentChannel(channels[0].key))
+            const { key, value } = channels[0]
+            dispatch(setCurrentChannel({ key, ...value }))
             setFirstMount(true)
         }
     }, [])

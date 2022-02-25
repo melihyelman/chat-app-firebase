@@ -1,6 +1,6 @@
 import { SearchIcon } from '@heroicons/react/outline';
 import { HashtagIcon } from '@heroicons/react/solid';
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useFirebaseConnect, useFirebase } from 'react-redux-firebase'
 import Message from './Message';
@@ -29,6 +29,14 @@ const ChatArea = ({ currentChannel }) => {
                 .then(() => setMessage(""))
         }
     }
+    const ref = useRef();
+    const scrollToBottom = () => {
+        ref.current.scrollIntoView({ block: "end", inline: "nearest" });
+    }
+
+    useEffect(() => scrollToBottom(), [messages]);
+
+    const filteredMessages = search.trim() !== "" ? messages.filter(message => message.value.content.toLowerCase().includes(search.toLowerCase()) || message.value.user.name.toLowerCase().includes(search.toLowerCase())) : messages;
     return (
         <>
             <div className='flex-1 relative flex-col w-full h-full p-5 bg-[#eee]'>
@@ -36,13 +44,14 @@ const ChatArea = ({ currentChannel }) => {
                     <div className='flex justify-center items-center'><HashtagIcon className='w-6 h-6 text-blue-800' /> <span className='pl-1'>{currentChannel.name}</span></div>
                     <div className='relative'>
                         <SearchIcon className='w-5 h-5 text-white absolute top-3 left-2' />
-                        <input className='bg-blue-700 p-2 pl-8 rounded-lg focus:outline-none border border-white text-white placeholder:text-white ' value={search} onChange={(e) => setSearch(e.target.value)} placeholder='Search message' />
+                        <input className='bg-blue-700 p-2 pl-8 rounded-lg focus:outline-none border border-white text-white placeholder:text-white ' value={search} onChange={(e) => setSearch(e.target.value)} placeholder='Search message or username' />
                     </div>
                 </div>
                 <div className='flex  h-[calc(100%_-_9rem)]  overflow-auto flex-col space-y-3'>
-                    {messages && messages.map(({ key, value }) => (
+                    {filteredMessages && filteredMessages.map(({ key, value }) => (
                         <Message key={key} value={value} from={value.user.id === currentUserId ? true : false} />
                     ))}
+                    <div ref={ref}></div>
                 </div>
                 <form onSubmit={handleSubmit} className='flex my-3 h-16'>
                     <input className='w-full px-4 rounded-l-lg focus:outline-none' placeholder={`Message for ${currentChannel.name} channel`} value={message} onChange={(e) => setMessage(e.target.value)} />
