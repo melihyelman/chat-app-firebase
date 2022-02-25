@@ -2,13 +2,33 @@ import { SearchIcon } from '@heroicons/react/outline';
 import { HashtagIcon, SearchCircleIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
-import { useFirebase } from 'react-redux-firebase'
+import { useFirebaseConnect, isEmpty, isLoaded, useFirebase } from 'react-redux-firebase'
+import Message from './Message';
 
 const ChatArea = ({ currentChannel }) => {
+    useFirebaseConnect([{ path: `/messages/${currentChannel.key}`, storeAs: 'messages' }])
+    const firebase = useFirebase();
     const [message, setMessage] = useState('')
     const [search, setSearch] = useState('')
-    const firebase = useFirebase();
-    // useSelector();
+    const profile = useSelector(state => state.firebase.profile)
+    const currentUserId = useSelector(state => state.firebase.auth.uid)
+    const messages = useSelector(state => state.firebase.ordered.messages)
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (message.trim() !== '') {
+            firebase.push(`messages/${currentChannel.key}`, {
+                content: message,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                user: {
+                    id: currentUserId,
+                    name: profile.name,
+                    avatar: profile.avatar
+                },
+            })
+                .then(() => setMessage(""))
+        }
+    }
     return (
         <>
             <div className='flex-1 relative flex-col w-full h-full p-5 bg-[#eee]'>
@@ -19,20 +39,12 @@ const ChatArea = ({ currentChannel }) => {
                         <input className='bg-blue-700 p-2 pl-8 rounded-lg focus:outline-none border border-white text-white placeholder:text-white ' value={search} onChange={(e) => setSearch(e.target.value)} placeholder='Search message' />
                     </div>
                 </div>
-                <div className='flex  h-[calc(100%_-_9rem)]  overflow-auto flex-col'>
-                    <p>asdasd</p>
-                    <p>asdasd</p><p>asdasd</p><p>asdasd</p>
-                    <p>asdasd</p><p>asdasd</p><p>asdasd</p>
-                    <p>asdasd</p><p>asdasd</p><p>asdasd</p>
-                    <p>asdasd</p><p>asdasd</p><p>asdasd</p>
-                    <p>asdasd</p><p>asdasd</p><p>asdasd</p>
-                    <p>asdasd</p><p>asdasd</p><p>asdasd</p>
-                    <p>asdasd</p><p>asdasd</p><p>asdasd</p>
-                    <p>asdasd</p><p>asdasd</p><p>asdasd</p>
-                    <p>asdasd</p><p>asdasd</p><p>asdasd</p>
-                    <p>asdasd</p><p>asdasd</p><p>asdasd</p>
+                <div className='flex  h-[calc(100%_-_9rem)]  overflow-auto flex-col space-y-3'>
+                    {messages && messages.map(({ key, value }) => (
+                        <Message key={key} value={value} from={value.user.id === currentUserId ? true : false} />
+                    ))}
                 </div>
-                <form onSubmit={(e) => e.preventDefault()} className='flex my-3 h-16'>
+                <form onSubmit={handleSubmit} className='flex my-3 h-16'>
                     <input className='w-full px-4 rounded-l-lg focus:outline-none' placeholder={`Message for ${currentChannel.name} channel`} value={message} onChange={(e) => setMessage(e.target.value)} />
                     <button type='submit' className='bg-blue-800 w-16 text-white p-2 rounded-r-lg focus:outline-none'
                     >Send </button>

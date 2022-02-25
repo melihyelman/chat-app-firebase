@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import ChatArea from './Chat/ChatArea'
+import ChatArea from './components/Chat/ChatArea'
 import SideBar from './components/SideBar/SideBar'
 
 const App = () => {
