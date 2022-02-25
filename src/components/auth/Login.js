@@ -18,7 +18,7 @@ const Login = () => {
             //
             setFbErrors([]);
             firebase.login({ email: values.email, password: values.password })
-                .then(user => console.log(user))
+                .then()
                 .catch(err => setFbErrors([{ message: err.message }]))
 
         }

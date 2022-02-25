@@ -1,5 +1,5 @@
 import { HashtagIcon } from '@heroicons/react/solid'
-import React from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty, isLoaded, useFirebaseConnect } from 'react-redux-firebase'
 import Loading from "../Loading"
@@ -10,6 +10,14 @@ const ChannelList = () => {
     const dispatch = useDispatch()
     const channels = useSelector(state => state.firebase.ordered.channels)
     const currentChannel = useSelector(state => state.channels.currentChannel)
+    const [firstMount, setFirstMount] = useState(false)
+
+    useEffect(() => {
+        if (!firstMount && !isEmpty(channels)) {
+            dispatch(setCurrentChannel(channels[0].key))
+            setFirstMount(true)
+        }
+    }, [])
 
     const handleClickChannel = (channel) => {
         dispatch(setCurrentChannel(channel))

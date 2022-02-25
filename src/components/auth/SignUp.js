@@ -24,7 +24,7 @@ const SignUp = () => {
             firebase.createUser(
                 { email: values.email, password: values.password },
                 { name: values.username, avatar: `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=random&color=#fff` })
-                .then(user => console.log(user))
+                .then()
                 .catch(err => setFbErrors([{ message: err.message }]))
         }
     })

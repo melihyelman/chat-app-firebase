@@ -1,8 +1,8 @@
 import { SearchIcon } from '@heroicons/react/outline';
-import { HashtagIcon, SearchCircleIcon } from '@heroicons/react/solid';
+import { HashtagIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
-import { useFirebaseConnect, isEmpty, isLoaded, useFirebase } from 'react-redux-firebase'
+import { useFirebaseConnect, useFirebase } from 'react-redux-firebase'
 import Message from './Message';
 
 const ChatArea = ({ currentChannel }) => {
